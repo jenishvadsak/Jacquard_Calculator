@@ -257,6 +257,7 @@
   <br>
   <label>Sell Rate: <input type="number" id="sellRate" disabled></label>
 
+  <div class="result" id="totalCardsResult">Total Cards: —</div>
   <div class="result" id="avgPickResult">Average Pick: —</div>
   <div class="result" id="totalCostResult">Total Cost: —</div>
   <div class="result" id="sellJobResult">Sell Job: —</div>
@@ -347,6 +348,7 @@
 
       let totalYarnCost = 0;
       let totalPick = 0;
+      let totalCards = 0;
 
       for (let i = 1; i <= 8; i++) {
         const pickVal = parseFloat(document.getElementById(`pick${i}`).value) || 0;
@@ -361,8 +363,10 @@
 
         totalYarnCost += yarnCost;
         totalPick += pickVal;
+        totalCards += cardsVal;
       }
 
+      document.getElementById('totalCardsResult').textContent = `Total Cards: ${totalCards}`;
       document.getElementById('avgPickResult').textContent = 
         `Average Pick: ${totalPick.toFixed(2)}`;
 
@@ -386,6 +390,7 @@
     function clearResults() {
       document.getElementById('cutOutput').textContent = 'Fabric Cut: —';
       document.getElementById('warpCost').textContent = 'Warp Cost: —';
+      document.getElementById('totalCardsResult').textContent = 'Total Cards: —';
       document.getElementById('avgPickResult').textContent = 'Average Pick: —';
       document.getElementById('totalCostResult').textContent = 'Total Cost: —';
       document.getElementById('sellJobResult').textContent = 'Sell Job: —';
