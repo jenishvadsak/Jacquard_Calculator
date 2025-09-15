@@ -142,6 +142,15 @@
       z-index: 1000;
       display: none;
     }
+    select {
+  width: 100%;
+  max-width: 100%;
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
     @media (max-width: 480px) {
       body {
         padding: 10px;
@@ -164,7 +173,12 @@
   <h2>Fabric Cost Calculator</h2>
 
   <label>Pick on Loom: <input type="number" id="pick"></label>
-  <label>Panno (Machine Width): <input type="number" id="panno" value="50"></label>
+  <label>Panno (Machine Width): 
+  <select id="panno" class="compact-input">
+    <option value="50">50</option>
+    <option value="150">150</option>
+  </select>
+</label>
   <label>Length: <input type="number" id="length"></label>
 
   <details>
@@ -418,10 +432,11 @@
       });
 
       // Set up event listeners
-      document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('input', update);
-      });
-
+      document.querySelectorAll('input, select').forEach(el => {
+  el.addEventListener('input', update);
+  el.addEventListener('change', update);
+});
+      
       // Initial calculation
       update();
     });
