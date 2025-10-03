@@ -375,7 +375,7 @@
         const yarnCost = yarnWeight * rate;
 
         document.getElementById(`cards${i}`).textContent = cardsVal;
-        document.getElementById(`weight${i}`).textContent = yarnWeight.toFixed(4);
+        document.getElementById(`weight${i}`).textContent = yarnWeight.toFixed(2);
         document.getElementById(`yarn${i}`).textContent = `₹${yarnCost.toFixed(2)}`;
 
         totalYarnCost += yarnCost;
