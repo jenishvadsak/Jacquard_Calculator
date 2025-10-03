@@ -252,18 +252,19 @@
           <th>Feeder</th>
           <th>Pick</th>
           <th>Cards</th>
+          <th>Yarn Weight (kg)</th>
           <th>Yarn Cost (₹)</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td>Feeder 1</td><td><input type="number" id="pick1" disabled></td><td><span id="cards1">—</span></td><td><span id="yarn1">—</span></td></tr>
-        <tr><td>Feeder 2</td><td><input type="number" id="pick2" disabled></td><td><span id="cards2">—</span></td><td><span id="yarn2">—</span></td></tr>
-        <tr><td>Feeder 3</td><td><input type="number" id="pick3" disabled></td><td><span id="cards3">—</span></td><td><span id="yarn3">—</span></td></tr>
-        <tr><td>Feeder 4</td><td><input type="number" id="pick4" disabled></td><td><span id="cards4">—</span></td><td><span id="yarn4">—</span></td></tr>
-        <tr><td>Feeder 5</td><td><input type="number" id="pick5" disabled></td><td><span id="cards5">—</span></td><td><span id="yarn5">—</span></td></tr>
-        <tr><td>Feeder 6</td><td><input type="number" id="pick6" disabled></td><td><span id="cards6">—</span></td><td><span id="yarn6">—</span></td></tr>
-        <tr><td>Feeder 7</td><td><input type="number" id="pick7" disabled></td><td><span id="cards7">—</span></td><td><span id="yarn7">—</span></td></tr>
-        <tr><td>Feeder 8</td><td><input type="number" id="pick8" disabled></td><td><span id="cards8">—</span></td><td><span id="yarn8">—</span></td></tr>
+        <tr><td>Feeder 1</td><td><input type="number" id="pick1" disabled></td><td><span id="cards1">—</span></td><td><span id="weight1">—</span></td><td><span id="yarn1">—</span></td></tr>
+        <tr><td>Feeder 2</td><td><input type="number" id="pick2" disabled></td><td><span id="cards2">—</span></td><td><span id="weight2">—</span></td><td><span id="yarn2">—</span></td></tr>
+        <tr><td>Feeder 3</td><td><input type="number" id="pick3" disabled></td><td><span id="cards3">—</span></td><td><span id="weight3">—</span></td><td><span id="yarn3">—</span></td></tr>
+        <tr><td>Feeder 4</td><td><input type="number" id="pick4" disabled></td><td><span id="cards4">—</span></td><td><span id="weight4">—</span></td><td><span id="yarn4">—</span></td></tr>
+        <tr><td>Feeder 5</td><td><input type="number" id="pick5" disabled></td><td><span id="cards5">—</span></td><td><span id="weight5">—</span></td><td><span id="yarn5">—</span></td></tr>
+        <tr><td>Feeder 6</td><td><input type="number" id="pick6" disabled></td><td><span id="cards6">—</span></td><td><span id="weight6">—</span></td><td><span id="yarn6">—</span></td></tr>
+        <tr><td>Feeder 7</td><td><input type="number" id="pick7" disabled></td><td><span id="cards7">—</span></td><td><span id="weight7">—</span></td><td><span id="yarn7">—</span></td></tr>
+        <tr><td>Feeder 8</td><td><input type="number" id="pick8" disabled></td><td><span id="cards8">—</span></td><td><span id="weight8">—</span></td><td><span id="yarn8">—</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -370,9 +371,11 @@
         const rate = parseFloat(document.getElementById(`feeder${i}Rate`).value) || 0;
         
         const cardsVal = Math.round(pickVal * cutInInch);
-        const yarnCost = ((pickVal * panno * denier * cutInMeter) / 9000000) * rate;
+        const yarnWeight = (pickVal * panno * denier * cutInMeter) / 9000000;
+        const yarnCost = yarnWeight * rate;
 
         document.getElementById(`cards${i}`).textContent = cardsVal;
+        document.getElementById(`weight${i}`).textContent = yarnWeight.toFixed(4);
         document.getElementById(`yarn${i}`).textContent = `₹${yarnCost.toFixed(2)}`;
 
         totalYarnCost += yarnCost;
@@ -410,6 +413,7 @@
       document.getElementById('sellJobResult').textContent = 'Sell Job: —';
       for (let i = 1; i <= 8; i++) {
         document.getElementById(`cards${i}`).textContent = '—';
+        document.getElementById(`weight${i}`).textContent = '—';
         document.getElementById(`yarn${i}`).textContent = '—';
       }
     }
