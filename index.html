@@ -1,9 +1,481 @@
 <!DOCTYPE html>
-<html>
-  <meta http-equiv="refresh" content="10">
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#3367D6">
+  <meta name="description" content="Fabric production cost calculator">
+  <meta http-equiv="refresh" content="10">
+  <title>Fabric Cost Calculator</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 15px;
+      margin: 0;
+      max-width: 100vw;
+      overflow-x: hidden;
+      line-height: 1.4;
+      -webkit-text-size-adjust: 100%;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      -webkit-overflow-scrolling: touch;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+      font-size: 14px;
+    }
+    th {
+      background-color: #f0f0f0;
+      position: sticky;
+      top: 0;
+    }
+    input[type="number"] {
+      width: 100%;
+      max-width: 100%;
+      font-size: 16px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      -webkit-appearance: none;
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input:disabled {
+      background-color: #f5f5f5;
+    }
+    .result {
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+    details {
+      margin-top: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+    }
+    details summary {
+      font-weight: bold;
+      cursor: pointer;
+      outline: none;
+    }
+    fieldset {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+    }
+    legend {
+      font-weight: bold;
+      font-size: 14px;
+      padding: 0 5px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .material-wrapper {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .feeder-config {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .feeder-config-item {
+      border: 1px solid #ddd;
+      padding: 8px;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+    }
+    .feeder-header {
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 13px;
+      color: #333;
+    }
+    .compact-input {
+      font-size: 14px;
+      padding: 6px;
+      height: 32px;
+    }
+    .compact-label {
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #555;
+    }
+    .install-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      background-color: #3367D6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      z-index: 1000;
+      display: none;
+    }
+    select {
+  width: 100%;
+  max-width: 100%;
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .feeder-config {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+      input[type="number"] {
+        padding: 6px;
+      }
+      th, td {
+        padding: 6px;
+        font-size: 13px;
+      }
+    }
+    input.decimal {
+  font-size: 16px;
+}
+  </style>
 </head>
 <body>
-ERROR 404
+
+  <h2>Fabric Cost Calculator</h2>
+
+  <label>Pick on Loom: <input type="text" inputmode="decimal" class="decimal" id="pick"></label>
+  <label>Panno (Machine Width): 
+  <select id="panno" class="compact-input">
+    <option value="50">50</option>
+    <option value="150">150</option>
+  </select>
+</label>
+  <label>Length: <input type="text" inputmode="decimal" class="decimal" id="length"></label>
+
+  <details>
+    <summary><strong>Material Cost Details</strong></summary>
+    <div class="feeder-config">
+      <div class="feeder-config-item">
+        <div class="feeder-header">Feeder 1</div>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder1Denier" value="165"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder1Rate" value="250"></label>
+      </div>
+      <div class="feeder-config-item">
+        <div class="feeder-header">Feeder 2</div>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder2Denier" value="250"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder2Rate" value="315"></label>
+      </div>
+      <div class="feeder-config-item">
+        <div class="feeder-header">Feeder 3</div>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder3Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder3Rate" value="200"></label>
+      </div>
+      <div class="feeder-config-item">
+        <div class="feeder-header">Feeder 4</div>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder4Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder4Rate" value="200"></label>
+      </div>
+      <div class="feeder-config-item">
+        <div class="feeder-header">Feeder 5</div>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder5Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder5Rate" value="200"></label>
+      </div>
+      <div class="feeder-config-item">
+        <div class="feeder-header">Feeder 6</div>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder6Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder6Rate" value="200"></label>
+      </div>
+      <div class="feeder-config-item">
+        <div class="feeder-header">Feeder 7</div>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder7Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder7Rate" value="200"></label>
+      </div>
+      <div class="feeder-config-item">
+        <div class="feeder-header">Feeder 8</div>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder8Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder8Rate" value="200"></label>
+      </div>
+    </div>
+
+    <div class="material-wrapper">
+      <fieldset>
+        <legend>Warp</legend>
+        <label>Denier: <input type="text" inputmode="decimal" class="decimal" id="warpDenier" value="50"></label>
+        <label>Tar: <input type="text" inputmode="decimal" class="decimal" id="warpTar" value="28400"></label>
+        <label>Cost per Kg (₹): <input type="text" inputmode="decimal" class="decimal" id="warpCostInput" value="315"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Other</legend>
+        <label>Job Rate: <input type="text" inputmode="decimal" class="decimal" id="jobRate" value="0.22"></label>
+        <label>Fixed Cost: <input type="text" inputmode="decimal" class="decimal" id="fixedCost" value="35"></label>
+      </fieldset>
+    </div>
+  </details>
+
+  <div class="result" id="cutOutput">Fabric Cut: —</div>
+  <div class="result" id="warpCost">Warp Cost: —</div>
+
+  <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+    <table>
+      <thead>
+        <tr>
+          <th>Feeder</th>
+          <th>Pick</th>
+          <th>Cards</th>
+          <th>Yarn Weight (kg)</th>
+          <th>Yarn Cost (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Feeder 1</td><td><input type="text" inputmode="decimal" class="decimal" id="pick1" disabled></td><td><span id="cards1">—</span></td><td><span id="weight1">—</span></td><td><span id="yarn1">—</span></td></tr>
+        <tr><td>Feeder 2</td><td><input type="text" inputmode="decimal" class="decimal" id="pick2" disabled></td><td><span id="cards2">—</span></td><td><span id="weight2">—</span></td><td><span id="yarn2">—</span></td></tr>
+        <tr><td>Feeder 3</td><td><input type="text" inputmode="decimal" class="decimal" id="pick3" disabled></td><td><span id="cards3">—</span></td><td><span id="weight3">—</span></td><td><span id="yarn3">—</span></td></tr>
+        <tr><td>Feeder 4</td><td><input type="text" inputmode="decimal" class="decimal" id="pick4" disabled></td><td><span id="cards4">—</span></td><td><span id="weight4">—</span></td><td><span id="yarn4">—</span></td></tr>
+        <tr><td>Feeder 5</td><td><input type="text" inputmode="decimal" class="decimal" id="pick5" disabled></td><td><span id="cards5">—</span></td><td><span id="weight5">—</span></td><td><span id="yarn5">—</span></td></tr>
+        <tr><td>Feeder 6</td><td><input type="text" inputmode="decimal" class="decimal" id="pick6" disabled></td><td><span id="cards6">—</span></td><td><span id="weight6">—</span></td><td><span id="yarn6">—</span></td></tr>
+        <tr><td>Feeder 7</td><td><input type="text" inputmode="decimal" class="decimal" id="pick7" disabled></td><td><span id="cards7">—</span></td><td><span id="weight7">—</span></td><td><span id="yarn7">—</span></td></tr>
+        <tr><td>Feeder 8</td><td><input type="text" inputmode="decimal" class="decimal" id="pick8" disabled></td><td><span id="cards8">—</span></td><td><span id="weight8">—</span></td><td><span id="yarn8">—</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <br>
+  <label>Sell Rate: <input type="text" inputmode="decimal" class="decimal" id="sellRate" disabled></label>
+
+  <div class="result" id="totalCardsResult">Total Cards: —</div>
+  <div class="result" id="avgPickResult">Average Pick: —</div>
+  <div class="result" id="totalCostResult">Total Cost: —</div>
+  <div class="result" id="sellJobResult">Sell Job: —</div>
+
+  <button id="installBtn" class="install-btn">Install App</button>
+
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful');
+          })
+          .catch(err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
+
+    // Install Prompt
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'block';
+      
+      installBtn.addEventListener('click', () => {
+        installBtn.style.display = 'none';
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted install prompt');
+          } else {
+            console.log('User dismissed install prompt');
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+
+    // Calculator Logic
+    function update() {
+      const saveToLocalStorage = () => {
+        const ids = ['pick', 'panno', 'length', 'warpDenier', 'warpTar', 'warpCostInput', 'jobRate', 'fixedCost', 'sellRate'];
+        for (let i = 1; i <= 8; i++) {
+          ids.push(`feeder${i}Denier`, `feeder${i}Rate`, `pick${i}`);
+        }
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) localStorage.setItem(id, el.value);
+        });
+      };
+      saveToLocalStorage();
+
+      const pick = parseFloat(document.getElementById('pick').value) || 0;
+      const panno = parseFloat(document.getElementById('panno').value) || 50;
+      const length = parseFloat(document.getElementById('length').value) || 0;
+      const isValid = pick >= 1 && length >= 1 && panno >= 1;
+
+      for (let i = 1; i <= 8; i++) {
+        document.getElementById(`pick${i}`).disabled = !isValid;
+      }
+      document.getElementById('sellRate').disabled = !isValid;
+
+      if (!isValid) {
+        clearResults();
+        return;
+      }
+
+      const cutInInch = length / pick;
+      const cutInMeter = cutInInch / 39.37;
+      document.getElementById('cutOutput').textContent = 
+        `Fabric Cut: ${cutInMeter.toFixed(2)} meters (${cutInInch.toFixed(2)} inches)`;
+
+      const warpDenier = parseFloat(document.getElementById('warpDenier').value) || 50;
+      const warpTar = parseFloat(document.getElementById('warpTar').value) || 28400;
+      const warpRate = parseFloat(document.getElementById('warpCostInput').value) || 315;
+      let warpCost = (warpTar * warpDenier * cutInMeter) / 9000000 * warpRate;
+      warpCost = panno <= 100 ? warpCost / 3 : warpCost;
+      document.getElementById('warpCost').textContent = 
+        `Warp Cost: ₹${warpCost.toFixed(2)}`;
+
+      const fixedCost = parseFloat(document.getElementById('fixedCost').value) || 0;
+      const jobRate = parseFloat(document.getElementById('jobRate').value) || 0;
+
+      let totalYarnCost = 0;
+      let totalPick = 0;
+      let totalCards = 0;
+
+      for (let i = 1; i <= 8; i++) {
+        const pickVal = parseFloat(document.getElementById(`pick${i}`).value) || 0;
+        const denier = parseFloat(document.getElementById(`feeder${i}Denier`).value) || 0;
+        const rate = parseFloat(document.getElementById(`feeder${i}Rate`).value) || 0;
+        
+        const cardsVal = Math.round(pickVal * cutInInch);
+        const yarnWeight = (pickVal * panno * denier * cutInMeter) / 9000000;
+        const yarnCost = yarnWeight * rate;
+
+        document.getElementById(`cards${i}`).textContent = cardsVal;
+        document.getElementById(`weight${i}`).textContent = yarnWeight.toFixed(2);
+        document.getElementById(`yarn${i}`).textContent = `₹${yarnCost.toFixed(2)}`;
+
+        totalYarnCost += yarnCost;
+        totalPick += pickVal;
+        totalCards += cardsVal;
+      }
+
+      document.getElementById('totalCardsResult').textContent = `Total Cards: ${totalCards}`;
+      document.getElementById('avgPickResult').textContent = 
+        `Average Pick: ${totalPick.toFixed(2)}`;
+
+      const jobCostMultiplier = panno > 100 ? 3 : 1;
+      const totalCost = totalYarnCost + fixedCost + 
+                       (totalPick * jobRate * cutInMeter * jobCostMultiplier) + warpCost;
+      document.getElementById('totalCostResult').textContent = 
+        `Total Cost: ₹${totalCost.toFixed(2)}`;
+
+      const sellRate = parseFloat(document.getElementById('sellRate').value);
+      if (!isNaN(sellRate) && sellRate > 0) {
+        const sellJob = (sellRate - (totalYarnCost + fixedCost + warpCost)) / 
+                       (totalPick * cutInMeter * jobCostMultiplier);
+        document.getElementById('sellJobResult').textContent = 
+          `Sell Job: ₹${sellJob.toFixed(4)}`;
+      } else {
+        document.getElementById('sellJobResult').textContent = 'Sell Job: —';
+      }
+    }
+
+    function clearResults() {
+      document.getElementById('cutOutput').textContent = 'Fabric Cut: —';
+      document.getElementById('warpCost').textContent = 'Warp Cost: —';
+      document.getElementById('totalCardsResult').textContent = 'Total Cards: —';
+      document.getElementById('avgPickResult').textContent = 'Average Pick: —';
+      document.getElementById('totalCostResult').textContent = 'Total Cost: —';
+      document.getElementById('sellJobResult').textContent = 'Sell Job: —';
+      for (let i = 1; i <= 8; i++) {
+        document.getElementById(`cards${i}`).textContent = '—';
+        document.getElementById(`weight${i}`).textContent = '—';
+        document.getElementById(`yarn${i}`).textContent = '—';
+      }
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      // Load saved values
+      const ids = ['pick', 'panno', 'length', 'warpDenier', 'warpTar', 
+                   'warpCostInput', 'jobRate', 'fixedCost', 'sellRate'];
+      for (let i = 1; i <= 8; i++) {
+        ids.push(`feeder${i}Denier`, `feeder${i}Rate`, `pick${i}`);
+      }
+      
+      ids.forEach(id => {
+        const savedValue = localStorage.getItem(id);
+        if (savedValue !== null) {
+          const element = document.getElementById(id);
+          if (element) element.value = savedValue;
+        }
+      });
+
+      // Set up event listeners
+      document.querySelectorAll('input, select').forEach(el => {
+  el.addEventListener('input', update);
+  el.addEventListener('change', update);
+});
+      
+      // Initial calculation
+      update();
+    });
+    
+      document.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const inputs = Array.from(document.querySelectorAll("input, select"));
+      const index = inputs.indexOf(e.target);
+      if (index > -1 && index < inputs.length - 1) {
+        e.preventDefault();
+        const next = inputs[index + 1];
+        next.focus();
+        if (next.setSelectionRange && next.value.length) {
+          const len = next.value.length;
+          next.setSelectionRange(len, len);
+        }
+      }
+    }
+  });
+
+  document.addEventListener('input', function (e) {
+  if (!e.target.classList.contains('decimal')) return;
+
+  let v = e.target.value;
+
+  // allow digits + one decimal
+  v = v.replace(/[^0-9.]/g, '');
+  v = v.replace(/(\..*)\./g, '$1');
+
+  e.target.value = v;
+});
+  </script>
 </body>
 </html>
