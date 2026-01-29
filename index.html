@@ -47,18 +47,28 @@
       position: sticky;
       top: 0;
     }
-    input[type="number"] {
-      width: 100%;
-      max-width: 100%;
-      font-size: 16px;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      -webkit-appearance: none;
-      -moz-appearance: textfield;
-    }
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
+    input.decimal {
+  width: 100%;
+  max-width: 100%;
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  -webkit-appearance: none;
+}
+
+input.decimal:disabled {
+  background-color: #f5f5f5;
+}
+
+@media (max-width: 480px) {
+  input.decimal {
+    padding: 6px;
+  }
+}
+
+    input.decimal::-webkit-inner-spin-button,
+    input.decimal::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
@@ -159,7 +169,7 @@
       .feeder-config {
         grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       }
-      input[type="number"] {
+      input.decimal {
         padding: 6px;
       }
       th, td {
@@ -187,43 +197,43 @@
     <div class="feeder-config">
       <div class="feeder-config-item">
         <div class="feeder-header">Feeder 1</div>
-        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder1Denier" value="165"></label>
-        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder1Rate" value="250"></label>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder1Denier" value="165"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder1Rate" value="250"></label>
       </div>
       <div class="feeder-config-item">
         <div class="feeder-header">Feeder 2</div>
-        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder2Denier" value="250"></label>
-        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder2Rate" value="315"></label>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder2Denier" value="250"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder2Rate" value="315"></label>
       </div>
       <div class="feeder-config-item">
         <div class="feeder-header">Feeder 3</div>
-        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder3Denier" value="155"></label>
-        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder3Rate" value="200"></label>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder3Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder3Rate" value="200"></label>
       </div>
       <div class="feeder-config-item">
         <div class="feeder-header">Feeder 4</div>
-        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder4Denier" value="155"></label>
-        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder4Rate" value="200"></label>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder4Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder4Rate" value="200"></label>
       </div>
       <div class="feeder-config-item">
         <div class="feeder-header">Feeder 5</div>
-        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder5Denier" value="155"></label>
-        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder5Rate" value="200"></label>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder5Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder5Rate" value="200"></label>
       </div>
       <div class="feeder-config-item">
         <div class="feeder-header">Feeder 6</div>
-        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder6Denier" value="155"></label>
-        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder6Rate" value="200"></label>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder6Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder6Rate" value="200"></label>
       </div>
       <div class="feeder-config-item">
         <div class="feeder-header">Feeder 7</div>
-        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder7Denier" value="155"></label>
-        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder7Rate" value="200"></label>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder7Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder7Rate" value="200"></label>
       </div>
       <div class="feeder-config-item">
         <div class="feeder-header">Feeder 8</div>
-        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder8Denier" value="155"></label>
-        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal" class="compact-input" id="feeder8Rate" value="200"></label>
+        <label class="compact-label">Denier: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder8Denier" value="155"></label>
+        <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" class="decimal compact-input" id="feeder8Rate" value="200"></label>
       </div>
     </div>
 
