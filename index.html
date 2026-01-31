@@ -206,9 +206,14 @@ const data = snap.data();
 if (!data.active) throw "Blocked";
 
 // allow only one device permanently
-if (data.fingerprint && data.fingerprint !== deviceId) {
+const isIOSPWA =
+  window.navigator.standalone === true ||
+  window.matchMedia("(display-mode: standalone)").matches;
+
+if (!isIOSPWA && data.fingerprint && data.fingerprint !== deviceId) {
   throw "This link is already used on another device";
 }
+
 
 if (!data.fingerprint) {
   await updateDoc(ref, { fingerprint: deviceId });
