@@ -193,7 +193,7 @@ try {
 
   if (!token) {
     message.innerText = "Invalid link";
-    return;
+    throw "";
   }
 
   localStorage.setItem("access_token", token);
@@ -211,13 +211,13 @@ try {
 
   if (!snap.exists()) {
     message.innerText = "Invalid link";
-    return;
+    throw "";
   }
 
   const data = snap.data();
   if (!data.active) {
     message.innerText = "Blocked";
-    return;
+    throw "";
   }
 
   if (!data.fingerprint) {
@@ -228,7 +228,7 @@ try {
     });
   } else if (data.fingerprint !== deviceId) {
     message.innerText = "This link is already used on another device";
-    return;
+    throw "";
   } else {
     await updateDoc(ref, {
       visits: increment(1),
@@ -460,7 +460,7 @@ try {
          
            if (!isValid) {
              clearResults();
-             return;
+             throw "";
            }
          
            const cutInInch = length / pick;
