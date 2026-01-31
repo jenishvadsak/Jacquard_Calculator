@@ -189,7 +189,7 @@ const db = getFirestore(app);
 const message = document.getElementById("message");
 
 try {
-  const token = new URLSearchParams(window.location.search).get("token");
+  const token =   new URLSearchParams(window.location.search).get("token") ||   localStorage.getItem("access_token");
 
   if (!token) {
     message.innerText = "Invalid link";
