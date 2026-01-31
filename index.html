@@ -240,7 +240,9 @@ try {
   message.style.display = "none";
 
 } catch (e) {
-  message.innerText = "Error loading app";
+  if (!message.innerText) {
+    message.innerText = "Error loading app";
+  }
 }
 
 
