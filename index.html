@@ -191,10 +191,10 @@ try {
   const token = new URLSearchParams(window.location.search).get("token");
   if (!token) throw "Access denied";
 
-  let deviceId = localStorage.getItem("device_id");
+let deviceId = localStorage.getItem("device_id");
 
 if (!deviceId) {
-  snap.data().fingerprint !== deviceId
+  const fp = await FingerprintJS.load();
   const { visitorId } = await fp.get();
   deviceId = visitorId;
   localStorage.setItem("device_id", deviceId);
