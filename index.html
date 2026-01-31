@@ -219,13 +219,12 @@ if (saved) {
  else {
     message.innerHTML += "<br><br>Link not found. Open from WhatsApp once.";
   }
-  return;
-
+  throw "";
 }
 
 localStorage.setItem(
   "last_token_link",
-  window.location.pathname + window.location.search
+  window.location.origin + window.location.pathname + window.location.search
 );
 localStorage.setItem("access_token", token);
 
