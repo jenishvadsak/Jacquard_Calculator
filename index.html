@@ -185,6 +185,25 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+function getDeviceName() {
+  const ua = navigator.userAgent;
+
+  let os = "Unknown OS";
+  if (/android/i.test(ua)) os = "Android";
+  else if (/iphone|ipad|ipod/i.test(ua)) os = "iOS";
+  else if (/windows/i.test(ua)) os = "Windows";
+  else if (/mac/i.test(ua)) os = "Mac";
+
+  let browser = "Unknown Browser";
+  if (/chrome/i.test(ua)) browser = "Chrome";
+  else if (/safari/i.test(ua)) browser = "Safari";
+  else if (/firefox/i.test(ua)) browser = "Firefox";
+  else if (/edg/i.test(ua)) browser = "Edge";
+
+  const type = /mobile/i.test(ua) ? "Mobile" : "Desktop";
+
+  return `${os} | ${browser} | ${type}`;
+}
 
 const message = document.getElementById("message");
 
@@ -219,20 +238,22 @@ if (!token) {
     throw "";
   }
 
-  if (!data.fingerprint) {
-    await updateDoc(ref, {
-      fingerprint: deviceId,
-      visits: increment(1),
-      lastAccess: new Date()
-    });
+  await updateDoc(ref, {
+  fingerprint: deviceId,
+  device_name: getDeviceName(),   // ✅ NEW FIELD
+  visits: increment(1),
+  lastAccess: new Date()
+});
+
   } else if (data.fingerprint !== deviceId) {
     message.innerText = "This link is already used on another device";
     throw "";
   } else {
     await updateDoc(ref, {
-      visits: increment(1),
-      lastAccess: new Date()
-    });
+  device_name: getDeviceName(),   // ✅ keep updated
+  visits: increment(1),
+  lastAccess: new Date()
+});
   }
 
   document.getElementById("app").style.display = "block";
@@ -577,6 +598,11 @@ if (!token) {
            }
          }
          });
+         // Auto refresh every 1 minute
+setTimeout(() => {
+  window.location.reload();
+}, 60000); // 60000 ms = 1 minute
+
          
          
       </script>
