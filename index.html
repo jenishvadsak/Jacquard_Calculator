@@ -191,20 +191,36 @@ try {
   const token = new URLSearchParams(window.location.search).get("token");
   if (!token) throw "Access denied";
 
-  const fp = await FingerprintJS.load();
+  let deviceId = localStorage.getItem("device_id");
+
+if (!deviceId) {
+  snap.data().fingerprint !== deviceId
   const { visitorId } = await fp.get();
+  deviceId = visitorId;
+  localStorage.setItem("device_id", deviceId);
+}
 
-  const ref = doc(db, "access_tokens", token);
-  const snap = await getDoc(ref);
 
-  if (!snap.exists()) throw "Invalid link";
-  if (!snap.data().active) throw "Blocked";
+const ref = doc(db, "access_tokens", token);
+const snap = await getDoc(ref);
 
-  if (snap.data().fingerprint && snap.data().fingerprint !== visitorId)
-    throw "Device not allowed";
+if (!snap.exists()) throw "Invalid link";
 
-  if (!snap.data().fingerprint)
-    await updateDoc(ref, { fingerprint: visitorId });
+const data = snap.data();
+if (!data.active) throw "Blocked";
+
+// allow only one device permanently
+if (data.fingerprint && data.fingerprint !== deviceId) {
+  throw "This link is already used on another device";
+}
+
+// first device binds permanently
+if (!data.fingerprint) {
+  await updateDoc(ref, {
+    fingerprint: deviceId
+  });
+}
+
 
   await updateDoc(ref, {
     visits: increment(1),
