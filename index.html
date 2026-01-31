@@ -191,18 +191,10 @@ try {
   const token = new URLSearchParams(window.location.search).get("token");
   if (!token) throw "Access denied";
 
-let deviceId =
-  localStorage.getItem("device_id") ||
-  document.cookie.split("; ").find(r => r.startsWith("device_id="))?.split("=")[1];
+const fp = await FingerprintJS.load();
+const { visitorId } = await fp.get();
+const deviceId = visitorId;
 
-
-if (!deviceId) {
-  const fp = await FingerprintJS.load();
-  const { visitorId } = await fp.get();
-  deviceId = visitorId;
-  localStorage.setItem("device_id", deviceId);
-document.cookie = `device_id=${deviceId}; path=/; max-age=31536000; SameSite=None; Secure`;
-}
 
 
 const ref = doc(db, "access_tokens", token);
@@ -218,12 +210,10 @@ if (data.fingerprint && data.fingerprint !== deviceId) {
   throw "This link is already used on another device";
 }
 
-// first device binds permanently
 if (!data.fingerprint) {
-  await updateDoc(ref, {
-    fingerprint: deviceId
-  });
+  await updateDoc(ref, { fingerprint: deviceId });
 }
+
 
 
   await updateDoc(ref, {
