@@ -191,10 +191,15 @@ const message = document.getElementById("message");
 try {
   const token =   new URLSearchParams(window.location.search).get("token") ||   localStorage.getItem("access_token");
 
-  if (!token) {
-    message.innerText = "Invalid link";
-    throw "";
-  }
+if (!token) {
+  setTimeout(() => {
+    const stored = localStorage.getItem("access_token");
+    if (!stored) {
+      message.innerText = "Invalid link";
+    }
+  }, 300);
+  throw "";
+}
 
   localStorage.setItem("access_token", token);
 
@@ -240,9 +245,7 @@ try {
   message.style.display = "none";
 
 } catch (e) {
-  if (!message.innerText) {
-    message.innerText = "Error loading app";
-  }
+  console.error(e);
 }
 
 
