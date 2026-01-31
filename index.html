@@ -195,7 +195,7 @@ try {
 if (!token) {
   const saved = localStorage.getItem("last_token_link");
   message.innerHTML = `
-    <b>Activate app once</b><br><br>
+<b>Activate app once</b><br><br>
 <a id="openLinkBtn"
    href=""
    style="
@@ -209,13 +209,9 @@ if (!token) {
    ">
    Open activation link
 </a>
-
-
-      Open activation link
-    </button>
-    <br><br>
-    (Tap button once, app will activate forever)
-  `;
+<br><br>
+(Tap button once, app will activate forever)
+`;
 
 if (saved) {
   document.getElementById("openLinkBtn").href = saved;
