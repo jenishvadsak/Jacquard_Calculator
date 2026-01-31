@@ -174,7 +174,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-const FingerprintJS = await import("https://openfpcdn.io/fingerprintjs/v4");
+const FingerprintJS = (await import("https://openfpcdn.io/fingerprintjs/v4")).default;
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQxTKwA6va2gKH5p9a__-CC890CYC7Euo",
