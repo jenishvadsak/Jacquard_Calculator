@@ -188,8 +188,15 @@ const db = getFirestore(app);
 const message = document.getElementById("message");
 
 try {
-  const token = new URLSearchParams(window.location.search).get("token");
-  if (!token) throw "Access denied";
+  let token =
+  new URLSearchParams(window.location.search).get("token") ||
+  localStorage.getItem("access_token");
+
+if (!token) throw "Access denied";
+
+// save token forever (for installed app)
+localStorage.setItem("access_token", token);
+
 
 const fp = await FingerprintJS.load();
 const { visitorId } = await fp.get();
