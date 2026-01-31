@@ -211,7 +211,7 @@ if (!token) {
 
  if (!snap.exists()) {
   message.innerText = "Access revoked";
-  return;
+  throw "";
 }
   const data = snap.data();
   if (!data.active) {
