@@ -193,7 +193,7 @@ try {
 
 if (!token) {
   console.log("Waiting for stored token...");
-  return;
+  throw "";
 }
 
   localStorage.setItem("access_token", token);
