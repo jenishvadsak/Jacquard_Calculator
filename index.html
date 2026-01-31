@@ -169,7 +169,65 @@
          }
       </style>
    </head>
-   <body style="display:none">
+   <body>
+     <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBQxTKwA6va2gKH5p9a__-CC890CYC7Euo",
+  authDomain: "jacquardcalculator.firebaseapp.com",
+  projectId: "jacquardcalculator"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const params = new URLSearchParams(window.location.search);
+const token = params.get("token");
+
+if (!token) {
+  document.body.innerHTML = "Access denied";
+  throw new Error("No token");
+}
+
+const fp = await FingerprintJS.load();
+const { visitorId } = await fp.get();
+
+const ref = doc(db, "access_tokens", token);
+const snap = await getDoc(ref);
+
+if (!snap.exists()) {
+  document.body.innerHTML = "Invalid access";
+  throw new Error("Invalid token");
+}
+
+const data = snap.data();
+
+if (!data.active) {
+  document.body.innerHTML = "Blocked";
+  throw new Error("Blocked");
+}
+
+if (data.fingerprint && data.fingerprint !== visitorId) {
+  document.body.innerHTML = "Device not allowed";
+  throw new Error("Wrong device");
+}
+
+if (!data.fingerprint) {
+  await updateDoc(ref, { fingerprint: visitorId });
+}
+
+await updateDoc(ref, {
+  visits: increment(1),
+  lastAccess: new Date()
+});
+
+document.body.style.display = "block";
+</script>
+     <div id="message" style="padding:20px;font-size:18px;color:red"></div>
+
+<div id="app" style="display:none">
       <h2>Fabric Cost Calculator</h2>
       <label>Pick on Loom: <input type="number" id="pick"></label>
       <label>
@@ -502,61 +560,6 @@
          
          
       </script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBQxTKwA6va2gKH5p9a__-CC890CYC7Euo",
-  authDomain: "jacquardcalculator.firebaseapp.com",
-  projectId: "jacquardcalculator"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const params = new URLSearchParams(window.location.search);
-const token = params.get("token");
-
-if (!token) {
-  document.body.innerHTML = "Access denied";
-  throw new Error("No token");
-}
-
-const fp = await FingerprintJS.load();
-const { visitorId } = await fp.get();
-
-const ref = doc(db, "access_tokens", token);
-const snap = await getDoc(ref);
-
-if (!snap.exists()) {
-  document.body.innerHTML = "Invalid access";
-  throw new Error("Invalid token");
-}
-
-const data = snap.data();
-
-if (!data.active) {
-  document.body.innerHTML = "Blocked";
-  throw new Error("Blocked");
-}
-
-if (data.fingerprint && data.fingerprint !== visitorId) {
-  document.body.innerHTML = "Device not allowed";
-  throw new Error("Wrong device");
-}
-
-if (!data.fingerprint) {
-  await updateDoc(ref, { fingerprint: visitorId });
-}
-
-await updateDoc(ref, {
-  visits: increment(1),
-  lastAccess: new Date()
-});
-
-document.body.style.display = "block";
-</script>
-
+</div>
    </body>
 </html>
