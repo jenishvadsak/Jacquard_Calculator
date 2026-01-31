@@ -265,8 +265,12 @@ if (!data.fingerprint) {
   message.style.display = "none";
 
 } catch (e) {
-  message.innerText = e;
+  if (typeof e === "string" && e.length > 0) {
+    message.innerText = e;
+  }
 }
+
+
 </script>
 
 
