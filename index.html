@@ -205,7 +205,8 @@ if (!token) {
 
   if (saved) {
     document.getElementById("openLinkBtn").onclick = () => {
-      window.location.href = saved;
+      window.location.replace(saved);
+
     };
   } else {
     message.innerHTML += "<br><br>Link not found. Open from WhatsApp once.";
@@ -213,11 +214,11 @@ if (!token) {
   throw "";
 }
 
-localStorage.setItem("access_token", token);
 localStorage.setItem(
   "last_token_link",
-  window.location.href
+  window.location.pathname + window.location.search
 );
+
 
 
 
