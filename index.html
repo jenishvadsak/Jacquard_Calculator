@@ -196,19 +196,30 @@ if (!token) {
   const saved = localStorage.getItem("last_token_link");
   message.innerHTML = `
     <b>Activate app once</b><br><br>
-    <button id="openLinkBtn" style="padding:12px;font-size:16px">
+    <a id="openLinkBtn"
+   href=""
+   style="
+     display:inline-block;
+     padding:12px 16px;
+     font-size:16px;
+     background:#3367D6;
+     color:white;
+     text-decoration:none;
+     border-radius:6px;
+   ">
+   Open activation link
+</a>
+
       Open activation link
     </button>
     <br><br>
     (Tap button once, app will activate forever)
   `;
 
-  if (saved) {
-    document.getElementById("openLinkBtn").onclick = () => {
-      window.location.replace(saved);
-
-    };
-  } else {
+if (saved) {
+  document.getElementById("openLinkBtn").href = saved;
+}
+ else {
     message.innerHTML += "<br><br>Link not found. Open from WhatsApp once.";
   }
   throw "";
