@@ -198,9 +198,14 @@ if (!token) throw "Access denied";
 localStorage.setItem("access_token", token);
 
 
-const fp = await FingerprintJS.load();
-const { visitorId } = await fp.get();
-const deviceId = visitorId;
+let deviceId = localStorage.getItem("device_id");
+
+if (!deviceId) {
+  const fp = await FingerprintJS.load();
+  const { visitorId } = await fp.get();
+  deviceId = visitorId;
+  localStorage.setItem("device_id", deviceId);
+}
 
 
 
