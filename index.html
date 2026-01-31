@@ -7,7 +7,6 @@
       <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
       <meta name="theme-color" content="#3367D6">
       <meta name="description" content="Fabric production cost calculator">
-      <script src="https://openfpcdn.io/fingerprintjs/v4"></script>
       <title>Fabric Cost Calculator</title>
       <link rel="manifest" href="manifest.json">
       <link rel="apple-touch-icon" href="icon-192.png">
@@ -171,9 +170,11 @@
    <body>
      
      <div id="message" style="padding:20px;font-size:18px;color:red"></div>
-     <script type="module">
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const FingerprintJS = await import("https://openfpcdn.io/fingerprintjs/v4");
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQxTKwA6va2gKH5p9a__-CC890CYC7Euo",
@@ -184,51 +185,40 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const params = new URLSearchParams(window.location.search);
-const token = params.get("token");
+const message = document.getElementById("message");
 
-if (!token) {
-  document.getElementById("message").innerText = "Access denied";
-  throw new Error("No token");
+try {
+  const token = new URLSearchParams(window.location.search).get("token");
+  if (!token) throw "Access denied";
+
+  const fp = await FingerprintJS.load();
+  const { visitorId } = await fp.get();
+
+  const ref = doc(db, "access_tokens", token);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) throw "Invalid link";
+  if (!snap.data().active) throw "Blocked";
+
+  if (snap.data().fingerprint && snap.data().fingerprint !== visitorId)
+    throw "Device not allowed";
+
+  if (!snap.data().fingerprint)
+    await updateDoc(ref, { fingerprint: visitorId });
+
+  await updateDoc(ref, {
+    visits: increment(1),
+    lastAccess: new Date()
+  });
+
+  document.getElementById("app").style.display = "block";
+  message.style.display = "none";
+
+} catch (e) {
+  message.innerText = e;
 }
-
-const agent = await FingerprintJS.load();
-const result = await agent.get();
-const visitorId = result.visitorId;
-
-
-const ref = doc(db, "access_tokens", token);
-const snap = await getDoc(ref);
-
-if (!snap.exists()) {
-  document.getElementById("message").innerText = "Invalid access";
-  throw new Error("Invalid token");
-}
-
-const data = snap.data();
-
-if (!data.active) {
-  document.getElementById("message").innerText = "Blocked";
-
-  throw new Error("Blocked");
-}
-
-if (data.fingerprint && data.fingerprint !== visitorId) {
-  document.getElementById("message").innerText = "Device not allowed";
-  throw new Error("Wrong device");
-}
-
-if (!data.fingerprint) {
-  await updateDoc(ref, { fingerprint: visitorId });
-}
-
-await updateDoc(ref, {
-  visits: increment(1),
-  lastAccess: new Date()
-});
-
-document.getElementById("app").style.display = "block"; document.getElementById("message").style.display = "none";
 </script>
+
 
 <div id="app" style="display:none">
       <h2>Fabric Cost Calculator</h2>
