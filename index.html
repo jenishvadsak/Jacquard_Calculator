@@ -192,13 +192,8 @@ try {
   const token =   new URLSearchParams(window.location.search).get("token") ||   localStorage.getItem("access_token");
 
 if (!token) {
-  setTimeout(() => {
-    const stored = localStorage.getItem("access_token");
-    if (!stored) {
-      message.innerText = "Invalid link";
-    }
-  }, 300);
-  throw "";
+  console.log("Waiting for stored token...");
+  return;
 }
 
   localStorage.setItem("access_token", token);
@@ -214,11 +209,10 @@ if (!token) {
   const ref = doc(db, "access_tokens", token);
   const snap = await getDoc(ref);
 
-  if (!snap.exists()) {
-    message.innerText = "Invalid link";
-    throw "";
-  }
-
+ if (!snap.exists()) {
+  message.innerText = "Access revoked";
+  return;
+}
   const data = snap.data();
   if (!data.active) {
     message.innerText = "Blocked";
