@@ -153,12 +153,12 @@
          background-color: #fff;
          }
          @media (max-width: 480px) {
-         body {
-         padding: 10px;
-         }
-         .feeder-config {
-         grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-         }
+  body { padding: 10px; }
+  .feeder-config {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}
+
          input[type="number"] {
          padding: 6px;
          }
@@ -166,10 +166,11 @@
          padding: 6px;
          font-size: 13px;
          }
-         }
       </style>
    </head>
    <body>
+     
+     <div id="message" style="padding:20px;font-size:18px;color:red"></div>
      <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
@@ -187,30 +188,33 @@ const params = new URLSearchParams(window.location.search);
 const token = params.get("token");
 
 if (!token) {
-  document.body.innerHTML = "Access denied";
+  document.getElementById("message").innerText = "Access denied";
   throw new Error("No token");
 }
 
-const fp = await FingerprintJS.load();
-const { visitorId } = await fp.get();
+const agent = await FingerprintJS.load();
+const result = await agent.get();
+const visitorId = result.visitorId;
+
 
 const ref = doc(db, "access_tokens", token);
 const snap = await getDoc(ref);
 
 if (!snap.exists()) {
-  document.body.innerHTML = "Invalid access";
+  document.getElementById("message").innerText = "Invalid access";
   throw new Error("Invalid token");
 }
 
 const data = snap.data();
 
 if (!data.active) {
-  document.body.innerHTML = "Blocked";
+  document.getElementById("message").innerText = "Blocked";
+
   throw new Error("Blocked");
 }
 
 if (data.fingerprint && data.fingerprint !== visitorId) {
-  document.body.innerHTML = "Device not allowed";
+  document.getElementById("message").innerText = "Device not allowed";
   throw new Error("Wrong device");
 }
 
@@ -223,9 +227,8 @@ await updateDoc(ref, {
   lastAccess: new Date()
 });
 
-document.body.style.display = "block";
+document.getElementById("app").style.display = "block"; document.getElementById("message").style.display = "none";
 </script>
-     <div id="message" style="padding:20px;font-size:18px;color:red"></div>
 
 <div id="app" style="display:none">
       <h2>Fabric Cost Calculator</h2>
