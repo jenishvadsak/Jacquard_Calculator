@@ -196,7 +196,7 @@ if (!token) {
   const saved = localStorage.getItem("last_token_link");
   message.innerHTML = `
     <b>Activate app once</b><br><br>
-    <a id="openLinkBtn"
+<a id="openLinkBtn"
    href=""
    style="
      display:inline-block;
@@ -209,6 +209,7 @@ if (!token) {
    ">
    Open activation link
 </a>
+
 
       Open activation link
     </button>
@@ -229,6 +230,7 @@ localStorage.setItem(
   "last_token_link",
   window.location.pathname + window.location.search
 );
+localStorage.setItem("access_token", token);
 
 
 
