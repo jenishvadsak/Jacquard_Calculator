@@ -192,7 +192,7 @@ try {
   new URLSearchParams(window.location.search).get("token") ||
   localStorage.getItem("access_token");
 
-if (!token) throw "Access denied";
+if (!token) {   message.innerHTML = `     <b>Activate app once</b><br><br>     1. Open link again from WhatsApp / SMS<br>     2. App will activate permanently<br>     3. You can then use it offline forever   `;   throw ""; }
 
 // save token forever (for installed app)
 localStorage.setItem("access_token", token);
