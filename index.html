@@ -192,10 +192,33 @@ try {
   new URLSearchParams(window.location.search).get("token") ||
   localStorage.getItem("access_token");
 
-if (!token) {   message.innerHTML = `     <b>Activate app once</b><br><br>     1. Open link again from WhatsApp / SMS<br>     2. App will activate permanently<br>     3. You can then use it offline forever   `;   throw ""; }
+if (!token) {
+  const saved = localStorage.getItem("last_token_link");
+  message.innerHTML = `
+    <b>Activate app once</b><br><br>
+    <button id="openLinkBtn" style="padding:12px;font-size:16px">
+      Open activation link
+    </button>
+    <br><br>
+    (Tap button once, app will activate forever)
+  `;
 
-// save token forever (for installed app)
+  if (saved) {
+    document.getElementById("openLinkBtn").onclick = () => {
+      window.location.href = saved;
+    };
+  } else {
+    message.innerHTML += "<br><br>Link not found. Open from WhatsApp once.";
+  }
+  throw "";
+}
+
 localStorage.setItem("access_token", token);
+localStorage.setItem(
+  "last_token_link",
+  window.location.href
+);
+
 
 
 let deviceId = localStorage.getItem("device_id");
