@@ -188,97 +188,60 @@ const db = getFirestore(app);
 const message = document.getElementById("message");
 
 try {
-  let token =
-  new URLSearchParams(window.location.search).get("token") ||
-  localStorage.getItem("access_token");
+  const token = new URLSearchParams(window.location.search).get("token");
 
-if (!token) {
-  const saved = localStorage.getItem("last_token_link");
-  message.innerHTML = `
-<b>Activate app once</b><br><br>
-<button id="openLinkBtn"
-  style="
-    padding:12px 16px;
-    font-size:16px;
-    background:#3367D6;
-    color:white;
-    border:none;
-    border-radius:6px;
-  ">
-  Open activation link
-</button>
-
-<br><br>
-(Tap button once, app will activate forever)
-`;
-if (saved) {
-  document.getElementById("openLinkBtn").onclick = () => {
-    window.location.href = saved;
-  };
-}
- else {
-    message.innerHTML += "<br><br>Link not found. Open from WhatsApp once.";
+  if (!token) {
+    message.innerText = "Invalid link";
+    return;
   }
-  throw "";
-}
 
-localStorage.setItem(
-  "last_token_link",
-  window.location.origin + window.location.pathname + window.location.search
-);
-localStorage.setItem("access_token", token);
+  localStorage.setItem("access_token", token);
 
+  let deviceId = localStorage.getItem("device_id");
+  if (!deviceId) {
+    const fp = await FingerprintJS.load();
+    const { visitorId } = await fp.get();
+    deviceId = visitorId;
+    localStorage.setItem("device_id", deviceId);
+  }
 
+  const ref = doc(db, "access_tokens", token);
+  const snap = await getDoc(ref);
 
+  if (!snap.exists()) {
+    message.innerText = "Invalid link";
+    return;
+  }
 
-let deviceId = localStorage.getItem("device_id");
+  const data = snap.data();
+  if (!data.active) {
+    message.innerText = "Blocked";
+    return;
+  }
 
-if (!deviceId) {
-  const fp = await FingerprintJS.load();
-  const { visitorId } = await fp.get();
-  deviceId = visitorId;
-  localStorage.setItem("device_id", deviceId);
-}
-
-
-
-const ref = doc(db, "access_tokens", token);
-const snap = await getDoc(ref);
-
-if (!snap.exists()) throw "Invalid link";
-
-const data = snap.data();
-if (!data.active) throw "Blocked";
-
-// allow only one device permanently
-const isIOSPWA =
-  window.navigator.standalone === true ||
-  window.matchMedia("(display-mode: standalone)").matches;
-
-if (!isIOSPWA && data.fingerprint && data.fingerprint !== deviceId) {
-  throw "This link is already used on another device";
-}
-
-
-if (!data.fingerprint) {
-  await updateDoc(ref, { fingerprint: deviceId });
-}
-
-
-
-  await updateDoc(ref, {
-    visits: increment(1),
-    lastAccess: new Date()
-  });
+  if (!data.fingerprint) {
+    await updateDoc(ref, {
+      fingerprint: deviceId,
+      visits: increment(1),
+      lastAccess: new Date()
+    });
+  } else if (data.fingerprint !== deviceId) {
+    message.innerText = "This link is already used on another device";
+    return;
+  } else {
+    await updateDoc(ref, {
+      visits: increment(1),
+      lastAccess: new Date()
+    });
+  }
 
   document.getElementById("app").style.display = "block";
   message.style.display = "none";
 
 } catch (e) {
-  if (typeof e === "string" && e.length > 0) {
-    message.innerText = e;
-  }
+  message.innerText = "Error loading app";
 }
+
 
 
 </script>
