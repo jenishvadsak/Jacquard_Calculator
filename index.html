@@ -152,12 +152,12 @@
          background-color: #fff;
          }
          @media (max-width: 480px) {
-  body { padding: 10px; }
-  .feeder-config {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  }
-}
-
+         body {
+         padding: 10px;
+         }
+         .feeder-config {
+         grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+         }
          input[type="number"] {
          padding: 6px;
          }
@@ -165,110 +165,10 @@
          padding: 6px;
          font-size: 13px;
          }
+         }
       </style>
    </head>
    <body>
-     
-     <div id="message" style="padding:20px;font-size:18px;color:red"></div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-
-const FingerprintJS = (await import("https://openfpcdn.io/fingerprintjs/v4")).default;
-
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBQxTKwA6va2gKH5p9a__-CC890CYC7Euo",
-  authDomain: "jacquardcalculator.firebaseapp.com",
-  projectId: "jacquardcalculator"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-function getDeviceName() {
-  const ua = navigator.userAgent;
-
-  let os = "Unknown OS";
-  if (/android/i.test(ua)) os = "Android";
-  else if (/iphone|ipad|ipod/i.test(ua)) os = "iOS";
-  else if (/windows/i.test(ua)) os = "Windows";
-  else if (/mac/i.test(ua)) os = "Mac";
-
-  let browser = "Unknown Browser";
-  if (/chrome/i.test(ua)) browser = "Chrome";
-  else if (/safari/i.test(ua)) browser = "Safari";
-  else if (/firefox/i.test(ua)) browser = "Firefox";
-  else if (/edg/i.test(ua)) browser = "Edge";
-
-  const type = /mobile/i.test(ua) ? "Mobile" : "Desktop";
-
-  return `${os} | ${browser} | ${type}`;
-}
-
-const message = document.getElementById("message");
-
-try {
-  const token =   new URLSearchParams(window.location.search).get("token") ||   localStorage.getItem("access_token");
-
-if (!token) {
-  console.log("Waiting for stored token...");
-  throw "";
-}
-
-  localStorage.setItem("access_token", token);
-
-  let deviceId = localStorage.getItem("device_id");
-  if (!deviceId) {
-    const fp = await FingerprintJS.load();
-    const { visitorId } = await fp.get();
-    deviceId = visitorId;
-    localStorage.setItem("device_id", deviceId);
-  }
-
-  const ref = doc(db, "access_tokens", token);
-  const snap = await getDoc(ref);
-
- if (!snap.exists()) {
-  message.innerText = "Access revoked";
-  throw "";
-}
-  const data = snap.data();
-  if (!data.active) {
-    message.innerText = "Blocked";
-    throw "";
-  }
-
-  await updateDoc(ref, {
-  fingerprint: deviceId,
-  device_name: getDeviceName(),   // ✅ NEW FIELD
-  visits: increment(1),
-  lastAccess: new Date()
-});
-
-  } else if (data.fingerprint !== deviceId) {
-    message.innerText = "This link is already used on another device";
-    throw "";
-  } else {
-    await updateDoc(ref, {
-  device_name: getDeviceName(),   // ✅ keep updated
-  visits: increment(1),
-  lastAccess: new Date()
-});
-  }
-
-  document.getElementById("app").style.display = "block";
-  message.style.display = "none";
-
-} catch (e) {
-  console.error(e);
-}
-
-
-
-</script>
-
-
-<div id="app" style="display:none">
       <h2>Fabric Cost Calculator</h2>
       <label>Pick on Loom: <input type="number" id="pick"></label>
       <label>
@@ -480,7 +380,7 @@ if (!token) {
          
            if (!isValid) {
              clearResults();
-             throw "";
+             return;
            }
          
            const cutInInch = length / pick;
@@ -598,14 +498,6 @@ if (!token) {
            }
          }
          });
-         // Auto refresh every 1 minute
-setTimeout(() => {
-  window.location.reload();
-}, 60000); // 60000 ms = 1 minute
-
-         
-         
       </script>
-</div>
    </body>
 </html>
