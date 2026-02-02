@@ -47,7 +47,7 @@
          position: sticky;
          top: 0;
          }
-         input[type="text"] { {
+         input[type="number"] {
          width: 100%;
          max-width: 100%;
          font-size: 16px;
@@ -57,8 +57,8 @@
          -webkit-appearance: none;
          -moz-appearance: textfield;
          }
-         input[type="text"] {::-webkit-inner-spin-button,
-         input[type="text"] {::-webkit-outer-spin-button {
+         input[type="number"]::-webkit-inner-spin-button,
+         input[type="number"]::-webkit-outer-spin-button {
          -webkit-appearance: none;
          margin: 0;
          }
@@ -159,7 +159,7 @@
          .feeder-config {
          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
          }
-         input[type="text"] { {
+         input[type="number"] {
          padding: 6px;
          }
          th, td {
@@ -171,7 +171,7 @@
    </head>
    <body>
       <h2>Fabric Cost Calculator</h2>
-      <label>Pick on Loom: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="pick"></label>
+      <label>Pick on Loom: <input type="number" id="pick"></label>
       <label>
          Panno (Machine Width): 
          <select id="panno" class="compact-input">
@@ -179,62 +179,62 @@
             <option value="150">150</option>
          </select>
       </label>
-      <label>Length: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="length"></label>
+      <label>Length: <input type="number" id="length"></label>
       <details>
          <summary><strong>Material Cost Details</strong></summary>
          <div class="feeder-config">
             <div class="feeder-config-item">
                <div class="feeder-header">Feeder 1</div>
-               <label class="compact-label">Denier: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder1Denier" value="165"></label>
-               <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder1Rate" value="250"></label>
+               <label class="compact-label">Denier: <input type="number" class="compact-input" id="feeder1Denier" value="165"></label>
+               <label class="compact-label">₹/Kg: <input type="number" class="compact-input" id="feeder1Rate" value="250"></label>
             </div>
             <div class="feeder-config-item">
                <div class="feeder-header">Feeder 2</div>
-               <label class="compact-label">Denier: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder2Denier" value="250"></label>
-               <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder2Rate" value="315"></label>
+               <label class="compact-label">Denier: <input type="number" class="compact-input" id="feeder2Denier" value="250"></label>
+               <label class="compact-label">₹/Kg: <input type="number" class="compact-input" id="feeder2Rate" value="315"></label>
             </div>
             <div class="feeder-config-item">
                <div class="feeder-header">Feeder 3</div>
-               <label class="compact-label">Denier: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder3Denier" value="155"></label>
-               <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder3Rate" value="200"></label>
+               <label class="compact-label">Denier: <input type="number" class="compact-input" id="feeder3Denier" value="155"></label>
+               <label class="compact-label">₹/Kg: <input type="number" class="compact-input" id="feeder3Rate" value="200"></label>
             </div>
             <div class="feeder-config-item">
                <div class="feeder-header">Feeder 4</div>
-               <label class="compact-label">Denier: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder4Denier" value="155"></label>
-               <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder4Rate" value="200"></label>
+               <label class="compact-label">Denier: <input type="number" class="compact-input" id="feeder4Denier" value="155"></label>
+               <label class="compact-label">₹/Kg: <input type="number" class="compact-input" id="feeder4Rate" value="200"></label>
             </div>
             <div class="feeder-config-item">
                <div class="feeder-header">Feeder 5</div>
-               <label class="compact-label">Denier: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder5Denier" value="155"></label>
-               <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder5Rate" value="200"></label>
+               <label class="compact-label">Denier: <input type="number" class="compact-input" id="feeder5Denier" value="155"></label>
+               <label class="compact-label">₹/Kg: <input type="number" class="compact-input" id="feeder5Rate" value="200"></label>
             </div>
             <div class="feeder-config-item">
                <div class="feeder-header">Feeder 6</div>
-               <label class="compact-label">Denier: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder6Denier" value="155"></label>
-               <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder6Rate" value="200"></label>
+               <label class="compact-label">Denier: <input type="number" class="compact-input" id="feeder6Denier" value="155"></label>
+               <label class="compact-label">₹/Kg: <input type="number" class="compact-input" id="feeder6Rate" value="200"></label>
             </div>
             <div class="feeder-config-item">
                <div class="feeder-header">Feeder 7</div>
-               <label class="compact-label">Denier: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder7Denier" value="155"></label>
-               <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder7Rate" value="200"></label>
+               <label class="compact-label">Denier: <input type="number" class="compact-input" id="feeder7Denier" value="155"></label>
+               <label class="compact-label">₹/Kg: <input type="number" class="compact-input" id="feeder7Rate" value="200"></label>
             </div>
             <div class="feeder-config-item">
                <div class="feeder-header">Feeder 8</div>
-               <label class="compact-label">Denier: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder8Denier" value="155"></label>
-               <label class="compact-label">₹/Kg: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" class="compact-input" id="feeder8Rate" value="200"></label>
+               <label class="compact-label">Denier: <input type="number" class="compact-input" id="feeder8Denier" value="155"></label>
+               <label class="compact-label">₹/Kg: <input type="number" class="compact-input" id="feeder8Rate" value="200"></label>
             </div>
          </div>
          <div class="material-wrapper">
             <fieldset>
                <legend>Warp</legend>
-               <label>Denier: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="warpDenier" value="50"></label>
-               <label>Tar: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="warpTar" value="28400"></label>
-               <label>Cost per Kg (₹): <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="warpCostInput" value="315"></label>
+               <label>Denier: <input type="number" id="warpDenier" value="50"></label>
+               <label>Tar: <input type="number" id="warpTar" value="28400"></label>
+               <label>Cost per Kg (₹): <input type="number" id="warpCostInput" value="315"></label>
             </fieldset>
             <fieldset>
                <legend>Other</legend>
-               <label>Job Rate: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="jobRate" value="0.22"></label>
-               <label>Fixed Cost: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="fixedCost" value="35"></label>
+               <label>Job Rate: <input type="number" id="jobRate" value="0.22"></label>
+               <label>Fixed Cost: <input type="number" id="fixedCost" value="35"></label>
             </fieldset>
          </div>
       </details>
@@ -254,56 +254,56 @@
             <tbody>
                <tr>
                   <td>Feeder 1</td>
-                  <td><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="pick1" disabled></td>
+                  <td><input type="number" id="pick1" disabled></td>
                   <td><span id="cards1">—</span></td>
                   <td><span id="weight1">—</span></td>
                   <td><span id="yarn1">—</span></td>
                </tr>
                <tr>
                   <td>Feeder 2</td>
-                  <td><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="pick2" disabled></td>
+                  <td><input type="number" id="pick2" disabled></td>
                   <td><span id="cards2">—</span></td>
                   <td><span id="weight2">—</span></td>
                   <td><span id="yarn2">—</span></td>
                </tr>
                <tr>
                   <td>Feeder 3</td>
-                  <td><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="pick3" disabled></td>
+                  <td><input type="number" id="pick3" disabled></td>
                   <td><span id="cards3">—</span></td>
                   <td><span id="weight3">—</span></td>
                   <td><span id="yarn3">—</span></td>
                </tr>
                <tr>
                   <td>Feeder 4</td>
-                  <td><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="pick4" disabled></td>
+                  <td><input type="number" id="pick4" disabled></td>
                   <td><span id="cards4">—</span></td>
                   <td><span id="weight4">—</span></td>
                   <td><span id="yarn4">—</span></td>
                </tr>
                <tr>
                   <td>Feeder 5</td>
-                  <td><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="pick5" disabled></td>
+                  <td><input type="number" id="pick5" disabled></td>
                   <td><span id="cards5">—</span></td>
                   <td><span id="weight5">—</span></td>
                   <td><span id="yarn5">—</span></td>
                </tr>
                <tr>
                   <td>Feeder 6</td>
-                  <td><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="pick6" disabled></td>
+                  <td><input type="number" id="pick6" disabled></td>
                   <td><span id="cards6">—</span></td>
                   <td><span id="weight6">—</span></td>
                   <td><span id="yarn6">—</span></td>
                </tr>
                <tr>
                   <td>Feeder 7</td>
-                  <td><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="pick7" disabled></td>
+                  <td><input type="number" id="pick7" disabled></td>
                   <td><span id="cards7">—</span></td>
                   <td><span id="weight7">—</span></td>
                   <td><span id="yarn7">—</span></td>
                </tr>
                <tr>
                   <td>Feeder 8</td>
-                  <td><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="pick8" disabled></td>
+                  <td><input type="number" id="pick8" disabled></td>
                   <td><span id="cards8">—</span></td>
                   <td><span id="weight8">—</span></td>
                   <td><span id="yarn8">—</span></td>
@@ -312,7 +312,7 @@
          </table>
       </div>
       <br>
-      <label>Sell Rate: <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="sellRate" disabled></label>
+      <label>Sell Rate: <input type="number" id="sellRate" disabled></label>
       <div class="result" id="totalCardsResult">Total Cards: —</div>
       <div class="result" id="avgPickResult">Average Pick: —</div>
       <div class="result" id="totalCostResult">Total Cost: —</div>
@@ -322,6 +322,4 @@
    </body>
 
 </html>
-
-
 
